@@ -1,7 +1,7 @@
 import axios from "axios";
 import { ACCESS_TOKEN_TOKEN, BASE_URL } from "../constants/WebConstants";
 
-export async function fetchMoviesNowPlaying() {
+export async function fetchMoviesNowPlaying(limit) {
     const apiUrl = BASE_URL + 'movie/now_playing?language=en-US&page=1'
     const requestType = 'GET';
 
@@ -20,17 +20,22 @@ export async function fetchMoviesNowPlaying() {
     const results = response.data.results
 
     for (const key in results) {
-        const data = results[key]
-        const movie = {
-            id: data.id,
-            title: data.original_title,
-            description: data.overview,
-            image: data.poster_path,
-            genres: data.genre_ids
-        }
-        console.log("Movie: {id: " + movie.id + ", title: " + movie.title + ", description: " + movie.description + ", image: " + movie.image + ", genres: " + movie.genres + "},\n")
-        movies.push(movie);
+      if (limit && parseInt(key) >= limit) {
+        break;
+      }
+
+      const data = results[key]
+      const movie = {
+          id: data.id,
+          title: data.original_title,
+          description: data.overview,
+          image: data.poster_path,
+          genres: data.genre_ids
+      }
+      console.log("key: " + key + ", Movie: {id: " + movie.id + ", title: " + movie.title + "},\n");// + ", description: " + movie.description + ", image: " + movie.image + ", genres: " + movie.genres + "},\n")
+      movies.push(movie);
     }
 
+    console.log("Size: " + movies.length);
     return movies
 }

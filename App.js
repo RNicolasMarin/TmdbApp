@@ -7,7 +7,7 @@ export default function App() {
   useEffect(() => {
     async function getMoviesNowPlaying() {
       try {
-        const movies = await fetchMoviesNowPlaying()
+        const movies = await fetchMoviesNowPlaying(8)
         console.log("Success: " + movies)
       } catch (error) {
         console.log("error: " + error);
