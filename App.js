@@ -1,7 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
-import { fetchMoviesNowPlaying } from './util/http';
-import { useEffect } from 'react';
+import { StyleSheet } from 'react-native';
 import HomeScreen from './screens/HomeScreen';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { NavigationContainer } from '@react-navigation/native';
@@ -12,7 +10,13 @@ function Navigation() {
   return (
     <NavigationContainer>
       <Stack.Navigator>
-        <Stack.Screen name='HOME SCREEN' component={HomeScreen} />
+        <Stack.Screen name='HomeScreen' component={HomeScreen} options={{
+          title: 'The Movie DB',
+          headerTintColor: 'white',
+          headerStyle: {
+            backgroundColor: 'black',
+          }
+        }} />
       </Stack.Navigator>
     </NavigationContainer>
   )
@@ -21,7 +25,7 @@ function Navigation() {
 export default function App() {
   return (
     <>
-      <StatusBar style="dark" />
+      <StatusBar style="light" />
       <Navigation />
     </>
   );

@@ -74,7 +74,8 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         fontSize: 15,
         color: 'white',
-        marginTop: 6
+        marginTop: 6,
+        width: 150
     },
     image: {
         width: 150,
