@@ -2,8 +2,9 @@ import { ScrollView, StyleSheet } from "react-native";
 import HorizontalMovieList from "../components/HorizontalMovieList";
 import { fetchMoviesNowPlaying, fetchMoviesPopular, fetchMoviesTopRated, fetchMoviesUpcoming } from "../util/http";
 import { useEffect, useState } from "react";
+import { NowPlaying, Popular, TopRated, Upcoming } from "../constants/categories";
 
-function HomeScreen() {
+function HomeScreen({ navigation }) {
     const initialState = { loading: true, error: false, data: [] }
     const [nowPlaying, setNowPlaying] = useState(initialState)
     const [popular, setPopular] = useState(initialState)
@@ -41,12 +42,18 @@ function HomeScreen() {
         getMoviesUpcoming();
     }, []);
 
+    function goToMovies(category) {
+      navigation.navigate('MovieListScreen', {
+        category: category
+      });
+    }
+
     return (
         <ScrollView style={styles.container}>
-            <HorizontalMovieList title="Now Playing" movies={nowPlaying.data} />
-            <HorizontalMovieList title="Popular" movies={popular.data} />
-            <HorizontalMovieList title="Top Rated" movies={topRated.data} />
-            <HorizontalMovieList title="Upcoming" movies={upcoming.data} />
+            <HorizontalMovieList category={NowPlaying} movies={nowPlaying.data} goToMovies={() => { goToMovies(NowPlaying) }} />
+            <HorizontalMovieList category={Popular} movies={popular.data} goToMovies={() => { goToMovies(Popular) }} />
+            <HorizontalMovieList category={TopRated} movies={topRated.data} goToMovies={() => { goToMovies(TopRated) }} />
+            <HorizontalMovieList category={Upcoming} movies={upcoming.data} goToMovies={() => { goToMovies(Upcoming) }} />
         </ScrollView>
     )
 }

@@ -1,43 +1,28 @@
-import { FlatList, Image, Pressable, StyleSheet, Text, View } from "react-native";
-import { IMAGE_BASE_URL } from "../constants/WebConstants";
+import { FlatList, Pressable, StyleSheet, Text, View } from "react-native";
+import { getTitle } from "../constants/categories";
+import MovieListItem from "./MovieListItem";
+import ItemSeparator from "./ItemSeparator";
 
-function HorizontalMovieList({ title, movies }) {
-
-    const renderItem = ({ item }) => (
-        <View style={styles.item}>
-            <View style={styles.imageContainer}>
-                <Image
-                    style={styles.image}
-                    source={{
-                        uri: IMAGE_BASE_URL + item.image
-                    }} 
-                />
-            </View>
-            <Text style={styles.movieTitle}>{item.title}</Text>
-        </View>
-      );
-
-    const ItemSeparator = () => <View style={styles.separator} />;
+function HorizontalMovieList({ category, movies, goToMovies }) {
+    const title = getTitle(category)
 
     return (
         <View style={styles.container}>
             <View style={styles.listHeader}>
                 <Text style={styles.listTitle}>{title}</Text>
-                <Pressable onPress={() => {
-                    console.log("PRESSED");
-                }}>
+                <Pressable onPress={() => { goToMovies() }}>
                     <Text style={styles.listTitle}>More  &gt;</Text>
                 </Pressable>
             </View>
             <FlatList
                 data={movies}
-                renderItem={renderItem}
+                renderItem={({ item }) => <MovieListItem item={item}/>}
                 keyExtractor={(item) => item.id}
                 horizontal={true}
                 ItemSeparatorComponent={ItemSeparator}
             />
         </View>
-    )
+    );
 }
 
 export default HorizontalMovieList;
@@ -57,29 +42,5 @@ const styles = StyleSheet.create({
         fontSize: 20,
         color: 'white',
         marginBottom: 10
-    },
-    item: {
-
-    },
-    separator: {
-        width: 10
-    },
-    imageContainer: {
-        borderWidth: 2, // Border width
-        borderColor: 'white', // Border color
-        borderRadius: 10, // Border radius (optional)
-        overflow: 'hidden', // Clip image to border
-    },
-    movieTitle: {
-        fontWeight: 'bold',
-        fontSize: 15,
-        color: 'white',
-        marginTop: 6,
-        width: 150
-    },
-    image: {
-        width: 150,
-        height: 250,
-        resizeMode: 'cover',
     }
 })
