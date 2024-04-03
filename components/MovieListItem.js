@@ -1,19 +1,24 @@
-import { Image, StyleSheet, Text, View } from "react-native";
+import { Image, Pressable, StyleSheet, Text, View } from "react-native";
 import { IMAGE_BASE_URL } from "../constants/WebConstants";
 
-function MovieListItem({ item, itemStyle }) {
+function MovieListItem({ item, itemStyle, onMoviePressed }) {
     return (
-        <View style={[styles.item, itemStyle]}>
+        <Pressable 
+            style={[styles.item, itemStyle]}
+            onPress={() => {
+                onMoviePressed(item)
+            }}
+        >
             <View style={styles.imageContainer}>
                 <Image
                     style={styles.image}
                     source={{
-                        uri: IMAGE_BASE_URL + item.image
+                        uri: IMAGE_BASE_URL + item.image_portrait
                     }} 
                 />
             </View>
             <Text style={styles.movieTitle}>{item.title}</Text>
-        </View>
+        </Pressable>
     );
 }
 

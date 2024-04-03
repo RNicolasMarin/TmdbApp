@@ -28,12 +28,18 @@ function MovieListScreen({ route, navigation }) {
         }
         getMovies();
     }, []);
+
+    function goToMovieDetail(item) {
+        navigation.navigate('MovieDetailsScreen', {
+            item: item
+        });
+    }
         
     return (
         <View style={styles.container}>
             <FlatList style={styles.grid}
                 data={movies.data}
-                renderItem={({ item }) => <MovieListItem item={item} itemStyle={styles.item}/>}
+                renderItem={({ item }) => <MovieListItem item={item} itemStyle={styles.item} onMoviePressed={goToMovieDetail}/>}
                 keyExtractor={(item) => item.id}
                 numColumns={2}
                 ItemSeparatorComponent={ItemSeparator}

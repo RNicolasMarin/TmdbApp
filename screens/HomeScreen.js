@@ -48,12 +48,18 @@ function HomeScreen({ navigation }) {
       });
     }
 
+    function goToMovieDetail(item) {
+      navigation.navigate('MovieDetailsScreen', {
+        item: item
+      });
+    }
+
     return (
         <ScrollView style={styles.container}>
-            <HorizontalMovieList category={NowPlaying} movies={nowPlaying.data} goToMovies={() => { goToMovies(NowPlaying) }} />
-            <HorizontalMovieList category={Popular} movies={popular.data} goToMovies={() => { goToMovies(Popular) }} />
-            <HorizontalMovieList category={TopRated} movies={topRated.data} goToMovies={() => { goToMovies(TopRated) }} />
-            <HorizontalMovieList category={Upcoming} movies={upcoming.data} goToMovies={() => { goToMovies(Upcoming) }} />
+            <HorizontalMovieList category={NowPlaying} movies={nowPlaying.data} goToMovies={() => { goToMovies(NowPlaying) }} onMoviePressed={goToMovieDetail} />
+            <HorizontalMovieList category={Popular} movies={popular.data} goToMovies={() => { goToMovies(Popular) }} onMoviePressed={goToMovieDetail}/>
+            <HorizontalMovieList category={TopRated} movies={topRated.data} goToMovies={() => { goToMovies(TopRated) }} onMoviePressed={goToMovieDetail}/>
+            <HorizontalMovieList category={Upcoming} movies={upcoming.data} goToMovies={() => { goToMovies(Upcoming) }} onMoviePressed={goToMovieDetail}/>
         </ScrollView>
     )
 }
