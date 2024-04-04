@@ -14,7 +14,7 @@ function HomeScreen({ navigation }) {
     useEffect(() => {
         async function getMovies(fetchMovies, setMovies) {
           try {
-            const movies = await fetchMovies(8)
+            const movies = await fetchMovies(8, 1)
             setMovies({ loading: false, error: false, data: movies })
           } catch (error) {
             setMovies({ loading: false, error: true, data: [] })
@@ -70,5 +70,4 @@ const styles = StyleSheet.create({
     container: {
         backgroundColor: 'white'
     },
-    
 })

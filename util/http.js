@@ -39,23 +39,23 @@ async function fetchMovies(limit, apiUrl) {
   return movies
 }
 
-export async function fetchMoviesNowPlaying(limit) {
-  const apiUrl = BASE_URL + 'movie/now_playing?language=en-US&page=1'
+export async function fetchMoviesNowPlaying(limit, page) {
+  const apiUrl = BASE_URL + 'movie/now_playing?language=en-US&page=' + page;
   return fetchMovies(limit, apiUrl)
 }
 
-export async function fetchMoviesPopular(limit) {
-  const apiUrl = BASE_URL + 'movie/popular?language=en-US&page=1'
+export async function fetchMoviesPopular(limit, page) {
+  const apiUrl = BASE_URL + 'movie/popular?language=en-US&page=' + page;
   return fetchMovies(limit, apiUrl)
 }
 
-export async function fetchMoviesTopRated(limit) {
-  const apiUrl = BASE_URL + 'movie/top_rated?language=en-US&page=1'
+export async function fetchMoviesTopRated(limit, page) {
+  const apiUrl = BASE_URL + 'movie/top_rated?language=en-US&page=' + page;
   return fetchMovies(limit, apiUrl)
 }
 
-export async function fetchMoviesUpcoming(limit) {
-  const apiUrl = BASE_URL + 'movie/upcoming?language=en-US&page=1'
+export async function fetchMoviesUpcoming(limit, page) {
+  const apiUrl = BASE_URL + 'movie/upcoming?language=en-US&page=' + page;
   return fetchMovies(limit, apiUrl)
 }
 

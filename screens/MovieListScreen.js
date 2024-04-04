@@ -1,4 +1,4 @@
-import { FlatList, StyleSheet, View } from "react-native";
+import { ActivityIndicator, FlatList, StyleSheet, View } from "react-native";
 import { useEffect, useLayoutEffect, useState } from "react";
 import { getFetchMoviesCall, getTitle } from "../constants/categories";
 import ItemSeparator from "../components/ItemSeparator";
@@ -13,17 +13,17 @@ function MovieListScreen({ route, navigation }) {
         });
     }, [navigation, title]);
        
-    const initialState = { loading: true, error: false, data: [] }
+    const initialState = { loading: true, error: false, data: [], loadingMore: false, page: 1 }
     const [movies, setMovies] = useState(initialState)
     
     useEffect(() => {
         async function getMovies() {
           try {
             const fetchMovies = getFetchMoviesCall(route.params.category)
-            const result = await fetchMovies()
-            setMovies({ loading: false, error: false, data: result })
+            const result = await fetchMovies(undefined, movies.page)
+            setMovies({ ...movies, loading: false, error: false, data: result, page: movies.page + 1 })
           } catch (error) {
-            setMovies({ loading: false, error: true, data: [] })
+            setMovies({ ...movies, loading: false, error: true, data: []})
           }
         }
         getMovies();
@@ -34,15 +34,38 @@ function MovieListScreen({ route, navigation }) {
             item: item
         });
     }
+
+    const loadMoreItems = async () => {
+        setMovies({ ...movies, loadingMore: true })
+
+        try {
+            const fetchMovies = getFetchMoviesCall(route.params.category)
+            const result = await fetchMovies(undefined, movies.page)
+            const newMovies = [...movies.data, ...result]
+            setMovies({ ...movies, data: newMovies, loadingMore: false, page: movies.page + 1 })
+        } catch (error) {
+            setMovies({ ...movies, error: true, loadingMore: false })
+        }
+    };
+
+    const renderItem = ({ item }) => <MovieListItem item={item} itemStyle={styles.item} onMoviePressed={goToMovieDetail}/>
+
+    const renderFooter = () => (
+        <View style={styles.loading}>
+            <ActivityIndicator size="small" color="white"/>
+        </View>
+    );
         
     return (
         <View style={styles.container}>
             <FlatList style={styles.grid}
                 data={movies.data}
-                renderItem={({ item }) => <MovieListItem item={item} itemStyle={styles.item} onMoviePressed={goToMovieDetail}/>}
+                renderItem={renderItem}
                 keyExtractor={(item) => item.id}
                 numColumns={2}
                 ItemSeparatorComponent={ItemSeparator}
+                onEndReached={loadMoreItems} // Call loadMoreItems when end is reached
+                ListFooterComponent={renderFooter}
             />
         </View>
     );
@@ -65,5 +88,9 @@ const styles = StyleSheet.create({
     item: {
         paddingHorizontal: 5,
         paddingVertical: 10
+    },
+    loading: {
+        alignItems: 'center',
+        padding: 15
     }
 })
