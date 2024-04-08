@@ -3,9 +3,14 @@ import { Image, ScrollView, StyleSheet, Text, View } from "react-native";
 import { fetchMovieDetails } from "../util/http";
 import { IMAGE_BASE_URL } from "../constants/WebConstants";
 import MovieSectionWithName from "../components/MovieSectionWithName";
+import { createShimmerPlaceholder } from "react-native-shimmer-placeholder";
+import { LinearGradient } from "expo-linear-gradient";
+
+const ShimmerPlaceholder = createShimmerPlaceholder(LinearGradient)
 
 function MovieDetailsScreen({ route, navigation }) {
     const title = route.params.item.title;
+    const [isImageLoaded, setIsImageLoaded] = useState(false); 
 
     useLayoutEffect(() => {
         navigation.setOptions({
@@ -37,33 +42,57 @@ function MovieDetailsScreen({ route, navigation }) {
 
     function getContentToShow() {
         const details = movieDetails.data
-        if (movieDetails.data === undefined) {
-            return <View style={styles.innerContainer}/>
+        let genres = ""
+        let companies = ""
+        let countries = ""
+        let languages = ""
+        let description = ""
+        let date = ""
+        let status = ""
+        let homepage = ""
+        if (details !== undefined) {
+            homepage = details.homepage
+            status = details.status
+            date = details.release_date
+            description = details.description
+            genres = getItemsToShow(details.genres)
+            companies = getItemsToShow(details.companies)
+            countries = getItemsToShow(details.countries)
+            languages = getItemsToShow(details.languages)
         } 
 
-        const genres = getItemsToShow(details.genres)
-        const companies = getItemsToShow(details.companies)
-        const countries = getItemsToShow(details.countries)
-        const languages = getItemsToShow(details.languages)
-        
         return (
             <View style={styles.innerContainer}>
                 <View style={styles.imageContainer}>
+                    { !isImageLoaded &&
+                        <View style={[styles.image]}>
+                            <ShimmerPlaceholder 
+                                style={{ width: '100%', height: '100%'}}
+                                duration={1500}
+                                direction="up"
+                                shimmerColors={['#F0F0F0', '#C0C0C0', '#F0F0F0']}
+                            />
+                        </View>
+                    }
+                    
                     <Image
-                        style={[styles.image, { aspectRatio: 16 / 9 }]}
+                        style={[styles.image, !isImageLoaded && { width: '0%', height: '0%'}]}
                         source={{
                             uri: IMAGE_BASE_URL + details.image_landscape
+                        }}
+                        onLoad={() => {
+                            setIsImageLoaded(true);
                         }} 
                     />
                 </View>
-                <MovieSectionWithName title={"Plot"} content={details.description}/>
-                <MovieSectionWithName title={"Genres"} content={genres}/>
-                <MovieSectionWithName title={"Studios"} content={companies}/>
-                <MovieSectionWithName title={"Release Date"} content={details.release_date}/>
-                <MovieSectionWithName title={"Countries"} content={countries}/>
-                <MovieSectionWithName title={"Languages"} content={languages}/>
-                <MovieSectionWithName title={"Status"} content={details.status}/>
-                <MovieSectionWithName title={"HomePage"} content={details.homepage}/>
+                <MovieSectionWithName title={"Plot"} content={description} isLoading={movieDetails.loading} height={120}/>
+                <MovieSectionWithName title={"Genres"} content={genres} isLoading={movieDetails.loading} height={60}/>
+                <MovieSectionWithName title={"Studios"} content={companies} isLoading={movieDetails.loading} height={70}/>
+                <MovieSectionWithName title={"Release Date"} content={date} isLoading={movieDetails.loading} height={60}/>
+                <MovieSectionWithName title={"Countries"} content={countries} isLoading={movieDetails.loading} height={50}/>
+                <MovieSectionWithName title={"Languages"} content={languages} isLoading={movieDetails.loading} height={60}/>
+                <MovieSectionWithName title={"Status"} content={status} isLoading={movieDetails.loading} height={70}/>
+                <MovieSectionWithName title={"HomePage"} content={homepage} isLoading={movieDetails.loading} height={60}/>
             </View>
         )
     }
@@ -94,5 +123,6 @@ const styles = StyleSheet.create({
     image: {
         width: 'auto',
         resizeMode: 'cover',
+        aspectRatio: 16 / 9
     }
 });

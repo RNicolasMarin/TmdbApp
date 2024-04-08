@@ -3,7 +3,7 @@ import { getTitle } from "../constants/categories";
 import MovieListItem from "./MovieListItem";
 import ItemSeparator from "./ItemSeparator";
 
-function HorizontalMovieList({ category, movies, goToMovies, onMoviePressed }) {
+function HorizontalMovieList({ category, movies, goToMovies, onMoviePressed, isLoading }) {
     const title = getTitle(category)
 
     return (
@@ -16,10 +16,11 @@ function HorizontalMovieList({ category, movies, goToMovies, onMoviePressed }) {
             </View>
             <FlatList
                 data={movies}
-                renderItem={({ item }) => <MovieListItem item={item} onMoviePressed={onMoviePressed}/>}
+                renderItem={({ item }) => <MovieListItem item={item} onMoviePressed={onMoviePressed} isLoading={isLoading}/>}
                 keyExtractor={(item) => item.id}
                 horizontal={true}
                 ItemSeparatorComponent={ItemSeparator}
+                scrollEnabled={!isLoading}
             />
         </View>
     );

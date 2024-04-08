@@ -5,39 +5,40 @@ import { useEffect, useState } from "react";
 import { NowPlaying, Popular, TopRated, Upcoming } from "../constants/categories";
 
 function HomeScreen({ navigation }) {
-    const initialState = { loading: true, error: false, data: [] }
+    const emptyData = [ {id: 1, title: "\n"}, {id: 2, title: "\n"}, {id: 3, title: "\n"}]
+    const initialState = { loading: true, error: false, data: emptyData }
     const [nowPlaying, setNowPlaying] = useState(initialState)
     const [popular, setPopular] = useState(initialState)
     const [topRated, setTopRated] = useState(initialState)
     const [upcoming, setUpcoming] = useState(initialState)
 
     useEffect(() => {
-        async function getMovies(fetchMovies, setMovies) {
+        async function getMovies(fetchMovies, setMovies, movies) {
           try {
             const movies = await fetchMovies(8, 1)
-            setMovies({ loading: false, error: false, data: movies })
+            setMovies({ ...movies, loading: false, error: false, data: movies })
           } catch (error) {
-            setMovies({ loading: false, error: true, data: [] })
+            setMovies({ ...movies, loading: false, error: true, data: [] })
           }
         }
 
         async function getMoviesNowPlaying() {
-          getMovies(fetchMoviesNowPlaying, setNowPlaying)  
+          getMovies(fetchMoviesNowPlaying, setNowPlaying, nowPlaying)  
         }
         getMoviesNowPlaying();
 
         async function getMoviesPopular() {
-          getMovies(fetchMoviesPopular, setPopular)    
+          getMovies(fetchMoviesPopular, setPopular, popular)    
         }
         getMoviesPopular();
 
         async function getMoviesTopRated() {
-          getMovies(fetchMoviesTopRated, setTopRated)    
+          getMovies(fetchMoviesTopRated, setTopRated, topRated)    
         }
         getMoviesTopRated();
 
         async function getMoviesUpcoming() {
-          getMovies(fetchMoviesUpcoming, setUpcoming)    
+          getMovies(fetchMoviesUpcoming, setUpcoming, upcoming)    
         }
         getMoviesUpcoming();
     }, []);
@@ -56,10 +57,34 @@ function HomeScreen({ navigation }) {
 
     return (
         <ScrollView style={styles.container}>
-            <HorizontalMovieList category={NowPlaying} movies={nowPlaying.data} goToMovies={() => { goToMovies(NowPlaying) }} onMoviePressed={goToMovieDetail} />
-            <HorizontalMovieList category={Popular} movies={popular.data} goToMovies={() => { goToMovies(Popular) }} onMoviePressed={goToMovieDetail}/>
-            <HorizontalMovieList category={TopRated} movies={topRated.data} goToMovies={() => { goToMovies(TopRated) }} onMoviePressed={goToMovieDetail}/>
-            <HorizontalMovieList category={Upcoming} movies={upcoming.data} goToMovies={() => { goToMovies(Upcoming) }} onMoviePressed={goToMovieDetail}/>
+            <HorizontalMovieList 
+              category={NowPlaying} 
+              movies={nowPlaying.data} 
+              goToMovies={() => { goToMovies(NowPlaying) }} 
+              onMoviePressed={goToMovieDetail} 
+              isLoading={nowPlaying.loading}
+            />
+            <HorizontalMovieList 
+              category={Popular} 
+              movies={popular.data} 
+              goToMovies={() => { goToMovies(Popular) }} 
+              onMoviePressed={goToMovieDetail}
+              isLoading={popular.loading}
+            />
+            <HorizontalMovieList 
+              category={TopRated} 
+              movies={topRated.data} 
+              goToMovies={() => { goToMovies(TopRated) }} 
+              onMoviePressed={goToMovieDetail}
+              isLoading={topRated.loading}
+            />
+            <HorizontalMovieList 
+              category={Upcoming} 
+              movies={upcoming.data} 
+              goToMovies={() => { goToMovies(Upcoming) }} 
+              onMoviePressed={goToMovieDetail}
+              isLoading={upcoming.loading}
+            />
         </ScrollView>
     )
 }
