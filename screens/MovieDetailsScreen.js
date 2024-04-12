@@ -1,5 +1,5 @@
 import { useEffect, useLayoutEffect, useState } from "react";
-import { Image, ScrollView, StyleSheet, Text, View } from "react-native";
+import { Image, ScrollView, StyleSheet, View } from "react-native";
 import { fetchMovieDetails } from "../util/http";
 import { IMAGE_BASE_URL } from "../constants/WebConstants";
 import MovieSectionWithName from "../components/MovieSectionWithName";

@@ -22,25 +22,13 @@ function HomeScreen({ navigation }) {
           }
         }
 
-        async function getMoviesNowPlaying() {
-          getMovies(fetchMoviesNowPlaying, setNowPlaying, nowPlaying)  
-        }
-        getMoviesNowPlaying();
+        getMovies(fetchMoviesNowPlaying, setNowPlaying, nowPlaying);
 
-        async function getMoviesPopular() {
-          getMovies(fetchMoviesPopular, setPopular, popular)    
-        }
-        getMoviesPopular();
+        getMovies(fetchMoviesPopular, setPopular, popular);
 
-        async function getMoviesTopRated() {
-          getMovies(fetchMoviesTopRated, setTopRated, topRated)    
-        }
-        getMoviesTopRated();
+        getMovies(fetchMoviesTopRated, setTopRated, topRated);
 
-        async function getMoviesUpcoming() {
-          getMovies(fetchMoviesUpcoming, setUpcoming, upcoming)    
-        }
-        getMoviesUpcoming();
+        getMovies(fetchMoviesUpcoming, setUpcoming, upcoming);
     }, []);
 
     function goToMovies(category) {
